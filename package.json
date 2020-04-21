@@ -1,0 +1,23 @@
+{
+  "name": "ocr-converter",
+  "version": "1.0.0",
+  "description": "An ocr app",
+  "main": "index.js",
+  "dependencies": {
+    "node-tesseract-ocr": "^1.0.0",
+    "pdfkit": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ocr-converter"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "Ayodeji Abodunrin",
+  "license": "ISC"
+}
