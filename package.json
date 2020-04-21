@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "node-tesseract-ocr": "^1.0.0",
-    "pdfkit": "^0.11.0"
+    "pdfkit": "^0.11.0",
+    "pdftoimage": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {
