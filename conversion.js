@@ -26,6 +26,7 @@ const convertToImages = async (filePath, tempPath) => {
 const getTextFromImages = async (tempDirPath) => {
   // read each image file and extract text
   const filesName = fs.readdirSync(tempDirPath);
+
   const compiledTexts = [];
   for (const [index, file] of filesName.entries()) {
     try {
@@ -46,12 +47,15 @@ const convertTextsToPdf = (texts, outputPath) => {
   //   if (!fs.existsSync(outputPath))
   //     throw new Error("Destination path does not exist");
 
-  pdfDoc.pipe(fs.createWriteStream(outputPath + ".pdf"));
+  const filePath = outputPath + ".pdf";
+  pdfDoc.pipe(fs.createWriteStream(filePath));
 
   for (const text of texts) {
     pdfDoc.text(text.text);
   }
   pdfDoc.end();
+
+  return filePath;
 };
 
 const clearTempFolder = (tempDirPath) => {
@@ -69,8 +73,10 @@ const runConversion = async (filePath, destPath) => {
 
   await convertToImages(filePath, tempDirPath);
   const readTexts = await getTextFromImages(tempDirPath);
-  convertTextsToPdf(readTexts, destinationPath);
+  const convertedFilePath = convertTextsToPdf(readTexts, destinationPath);
   clearTempFolder(tempDirPath);
+
+  return convertedFilePath;
 };
 
 module.exports = {
