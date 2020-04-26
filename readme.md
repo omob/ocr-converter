@@ -18,6 +18,12 @@ $ npm install
 $ node index.js
 ```
 
+### To run using command line args
+
+```sh
+$ node index.js [command] --filepath [filepath] --destination [destionationpath]
+```
+
 ### Development
 
 Want to contribute? Great!
