@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const tessaract = require("node-tesseract-ocr");
 const PDFDocument = require("pdfkit"); //create pdf document
+const officegen = require("officegen");
 const getFilePaths = require("./functions").getFilePaths;
 
 var pdftoimage = require("pdftoimage"); //converts pdf to image
@@ -58,11 +59,33 @@ const convertTextsToPdf = (texts, outputPath) => {
   return filePath;
 };
 
+const convertToWord = (texts, outputPath) => {
+  const docx = officegen("docx"); //create and empty word document
+  const filePath = outputPath + ".docx";
+
+  for (const text of texts) {
+    const paragraph = docx.createP();
+    paragraph.addText(text.text);
+  }
+
+  const documentWriteStream = fs.createWriteStream(filePath);
+
+  documentWriteStream.on("error", (err) => {
+    throw new Error(err);
+  });
+  // Async call to generate the output file:
+  docx.generate(documentWriteStream);
+
+  return outputPath;
+};
+
 const clearTempFolder = (tempDirPath) => {
   fs.rmdir(tempDirPath, { recursive: true }, () => {});
 };
 
 const runConversion = async (filePath, destPath) => {
+  const command = process.argv[2];
+
   const { tempDirPath, outputPath: _outputPath, tempDirName } = getFilePaths(
     filePath
   );
@@ -73,7 +96,16 @@ const runConversion = async (filePath, destPath) => {
 
   await convertToImages(filePath, tempDirPath);
   const readTexts = await getTextFromImages(tempDirPath);
-  const convertedFilePath = convertTextsToPdf(readTexts, destinationPath);
+
+  let convertedFilePath = "";
+
+  if (command == "pdf") {
+    convertedFilePath = convertTextsToPdf(readTexts, destinationPath);
+  } else {
+    // defaults to
+    convertedFilePath = convertToWord(readTexts, destinationPath);
+  }
+
   clearTempFolder(tempDirPath);
 
   return convertedFilePath;

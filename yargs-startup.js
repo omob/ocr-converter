@@ -18,8 +18,12 @@ yargs.command({
   handler: async (argv) => {
     try {
       const { filepath, destination } = argv;
-      await convert.runConversion(filepath, path.resolve(destination));
-      console.log("Done");
+      const response = await convert.runConversion(
+        filepath,
+        path.resolve(destination)
+      );
+
+      console.log(response);
     } catch (e) {
       console.log(e);
     }
